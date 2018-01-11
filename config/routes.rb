@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :api do
+  namespace :api, defaults: { format: :json }, path: '/api' do
     namespace :v1 do
       concerns :api_base
     end
