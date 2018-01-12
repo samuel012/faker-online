@@ -25,10 +25,10 @@ class DataGenerator
     self.class.send(:attr_accessor, attribute)
     dgList = []
     count = attrargs.key?("count") ? attrargs.fetch("count").to_i : 1
-    dg = DataGenerator.new
     c = Faker.const_get(faker_classification_symbol)
 
     (1..count).each do
+      dg = DataGenerator.new
       if c.method(attribute).parameters.length > 0 && !attrargs.empty? && attrargs.key?("val")
         dg.instance_variable_set("@#{attribute}", c.send(attribute, attrargs.fetch("val")))
       else
