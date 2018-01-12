@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     end
   end
 
+  # TODO: revisit if this ", defaults: { format: :json }, path: '/api'" can be removed without side-effects
+  # REF: https://stackoverflow.com/a/38557233/2695310
   namespace :api, defaults: { format: :json }, path: '/api' do
     namespace :v1 do
       concerns :api_base

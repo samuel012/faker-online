@@ -20,11 +20,13 @@ module Api::V1
 
       def set_data_generator
         qindex = 0
-        attrarg = ""
+        attrargs = {}
         path = request.fullpath
         if path.include?("?")
           qindex = path.index("?")
-          attrarg  = path[qindex + 1..-1].split("=").last
+          puts 'path[qindex + 1..-1]: ' + path[qindex + 1..-1]
+          # attrargs  = path[qindex + 1..-1].split("=").last
+          attrargs = path[qindex + 1..-1].split("&").map { |a| a.split("=") }.to_h
         end
         datatype = path[1..qindex - 1].split("/")
         datatype.shift(2)
@@ -35,8 +37,8 @@ module Api::V1
         puts 'request.fullpath: ' + request.fullpath
         puts 'qindex: ' + qindex.to_s
         puts 'datatype: ' + datatype.to_s
-        puts 'attrarg: ' + attrarg.to_s
-        @datagenerator = DataGenerator.find(datatype, attrarg)
+        puts 'attrargs: ' + attrargs.to_s
+        @datagenerator = DataGenerator.find(datatype, attrargs)
       end
   end
 end

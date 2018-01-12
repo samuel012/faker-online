@@ -11,9 +11,9 @@ class DataGenerator
   #   Faker::Superhero.name
   # end
 
-  def self.find(datatype, attrarg)
+  def self.find(datatype, attrargs)
     # datatype = ["address", "city"] | ["finance", "credit_card"]
-    # attrarg  = makati              | mastercard
+    # attrargs  = makati             | mastercard
 
     classification = datatype.first
     attribute = datatype.last
@@ -23,22 +23,21 @@ class DataGenerator
     faker_classification_symbol = faker_constants[downcased_constants.index(classification)]
     
     self.class.send(:attr_accessor, attribute)
+    dgList = []
+    count = attrargs.key?("count") ? attrargs.fetch("count").to_i : 1
     dg = DataGenerator.new
-
     c = Faker.const_get(faker_classification_symbol)
-    # puts '------------------------'
-    # puts 'classification: ' + classification
-    # puts 'attribute: ' + attribute
-    # puts 'attrarg: ' + attrarg
-    if c.method(attribute).parameters.length > 0 && attrarg != ""
-      dg.instance_variable_set("@#{attribute}", c.send(attribute, attrarg))
-    else
-      dg.instance_variable_set("@#{attribute}", c.send(attribute))
-    end
-    dg
-  end
 
-  def permitted_params
-    
+    (1..count).each do
+      if c.method(attribute).parameters.length > 0 && !attrargs.empty? && attrargs.key?("val")
+        dg.instance_variable_set("@#{attribute}", c.send(attribute, attrargs.fetch("val")))
+      else
+        dg.instance_variable_set("@#{attribute}", c.send(attribute))
+      end
+      dgList << dg
+    end
+
+    puts 'dgList: ' + dgList.to_s
+    dgList
   end
 end
